@@ -209,17 +209,17 @@ def temperature(dev, temperature):
 
 
 @cli.command()
-@click.argument("h", type=click.IntRange(0, 360), default=None)
-@click.argument("s", type=click.IntRange(0, 100), default=None)
-@click.argument("v", type=click.IntRange(0, 100), default=None)
+@click.argument("hsv", type=(click.IntRange(0, 360), click.IntRange(0, 100),
+                click.IntRange(0, 100)), default=(None, None, None),
+                required=False, metavar='[H S V]')
 @pass_dev
-def hsv(dev, h, s, v):
+def hsv(dev, hsv):
     """Get or set color in HSV. (Bulb only)"""
-    if h is None or s is None or v is None:
-        click.echo("Current HSV: %s" % dev.hsv)
+    if None in hsv:
+        click.echo("Current HSV: %s %s %s" % dev.hsv)
     else:
-        click.echo("Setting HSV: %s %s %s" % (h, s, v))
-        dev.hsv = (h, s, v)
+        click.echo("Setting HSV: %s %s %s" % hsv)
+        dev.hsv = hsv
 
 
 @cli.command()
